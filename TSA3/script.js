@@ -1,62 +1,45 @@
 var display = document.getElementById('display');
-var buttons = document.querySelectorAll('.button');
-let currentInput = '';
 
-function handleClick(button) {
-    button.addEventListener('click', function() {
-        let buttonText = button.innerText;
-
-        if (buttonText === 'C') {
-            currentInput = '';
-        }
-
-        else if (buttonText === '<') {
-            currentInput = currentInput.slice(0, -1);
-        }
-
-        else if (buttonText === '=') {
-            currentInput = evaluateExpression(currentInput);
-        }
-
-        else {
-            currentInput += buttonText;
-        }
-
-        display.value = currentInput;
-    });
+function clear() {
+    display.value = '';
 }
 
-for (let i = 0; i < buttons.length; i++) {
-    const button = buttons[i];
-    handleClick(button);
+function backspace() {
+    display.value = display.value.slice(0, -1);
 }
 
-document.getElementById('clear').addEventListener('click', function() {
-    currentInput = '';
-});
-
-document.getElementById('backspace').addEventListener('click', function() {
-    currentInput = currentInput.slice(0, -1);
-});
-
-function evaluateExpression(expression) {
-    let operators = /[+\-*\/]/;
-    let parts = expression.split(operators);
-    let operands = parts.map(parseFloat);
-    let operator = expression.match(operators)[0];
-
-    switch (operator) {
-        case '+':
-            return operands[0] + operands[1];
-        case '-':
-            return operands[0] - operands[1];
-        case '*':
-            return operands[0] * operands[1];
-        case '/':
-            if (operands[1] === 0) 
-            return 'Error';
-            return operands[0] / operands[1];
-        default:
-            return expression;
-    }
+function btnNum(number) {
+    display.value += number;
 }
+
+function operator(operator) {
+    display.value += operator;
+}
+
+function result() {
+    let expression = display.value;
+    let result = eval(expression);
+    display.value = result;
+}
+
+// Add event listeners to the buttons
+document.getElementById('clear').addEventListener('click', clear);
+document.getElementById('backspace').addEventListener('click', backspace);
+
+document.getElementById('divide').addEventListener('click', function(){ operator('/')});
+document.getElementById('multiply').addEventListener('click', function(){ operator('*')});
+document.getElementById('subtract').addEventListener('click', function(){ operator('-')});
+document.getElementById('add').addEventListener('click', function(){ operator('+')});
+document.getElementById('equal').addEventListener('click', result);
+
+document.getElementById('zero').addEventListener('click',function(){ btnNum('0')});
+document.getElementById('one').addEventListener('click', function(){ btnNum('1')});
+document.getElementById('two').addEventListener('click', function(){ btnNum('2')});
+document.getElementById('three').addEventListener('click', function(){ btnNum('3')});
+document.getElementById('four').addEventListener('click', function(){ btnNum('4')});
+document.getElementById('five').addEventListener('click', function(){ btnNum('5')});
+document.getElementById('six').addEventListener('click', function(){ btnNum('6')});
+document.getElementById('seven').addEventListener('click', function(){ btnNum('7')});
+document.getElementById('eight').addEventListener('click', function(){ btnNum('8')});
+document.getElementById('nine').addEventListener('click', function(){ btnNum('9')});
+document.getElementById('decimal').addEventListener('click', function(){ btnNum('.')});
